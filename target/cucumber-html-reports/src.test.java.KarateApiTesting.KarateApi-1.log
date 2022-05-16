@@ -1,0 +1,85 @@
+19:43:01.804 request:
+1 > GET http://dummy.restapiexample.com/api/v1/employees
+1 > Accept-Encoding: gzip,deflate
+1 > Connection: Keep-Alive
+1 > Host: dummy.restapiexample.com
+1 > User-Agent: Apache-HttpClient/4.5.5 (Java/1.8.0_291)
+
+19:43:02.076 response time in milliseconds: 267,25
+1 < 302
+1 < Cache-Control: public, max-age=2592000
+1 < Content-Length: 241
+1 < Content-Type: text/html; charset=iso-8859-1
+1 < Date: Mon, 16 May 2022 22:43:02 GMT
+1 < Display: staticcontent_sol
+1 < Host-Header: c2hhcmVkLmJsdWVob3N0LmNvbQ==
+1 < Location: http://dummy.restapiexample.com/cgi-sys/suspendedpage.cgi
+1 < Pagespeed: off
+1 < Response: 302
+1 < Server: nginx
+1 < Vary: [Accept-Encoding, User-Agent,Origin,Accept-Encoding]
+1 < X-Ezoic-Cdn: Hit ds;mm;64e5dcd8fd074fe044e20470a9643699;2-133674-5;c34f4f9f-9ec1-4074-645c-90c390df35f8
+1 < X-Middleton-Display: staticcontent_sol
+1 < X-Middleton-Response: 302
+1 < X-Origin-Cache-Control: 
+1 < X-Server-Cache: false
+1 < X-Sol: pub_site
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>302 Found</title>
+</head><body>
+<h1>Found</h1>
+<p>The document has moved <a href="http://dummy.restapiexample.com/cgi-sys/suspendedpage.cgi">here</a>.</p>
+</body></html>
+
+
+19:43:02.083 request:
+2 > GET http://dummy.restapiexample.com/api/v1/employees
+2 > Accept-Encoding: gzip,deflate
+2 > Connection: Keep-Alive
+2 > Host: dummy.restapiexample.com
+2 > User-Agent: Apache-HttpClient/4.5.5 (Java/1.8.0_291)
+
+19:43:02.150 response time in milliseconds: 65,82
+2 < 200
+2 < Cache-Control: public, max-age=2592000
+2 < Content-Length: 888
+2 < Content-Type: text/html
+2 < Date: Mon, 16 May 2022 22:43:02 GMT
+2 < Display: staticcontent_sol
+2 < Host-Header: c2hhcmVkLmJsdWVob3N0LmNvbQ==
+2 < Pagespeed: off
+2 < Response: 200
+2 < Server: nginx
+2 < Vary: [Accept-Encoding, Accept-Encoding,User-Agent,Origin]
+2 < X-Ezoic-Cdn: Hit ds;mm;00af562ac132dfe7536162add4328ca8;2-133674-5;7876ee77-a10b-4049-5b18-66b13b3fc196
+2 < X-Middleton-Display: staticcontent_sol
+2 < X-Middleton-Response: 200
+2 < X-Origin-Cache-Control: 
+2 < X-Server-Cache: false
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="//bluehost-cdn.com/media/user/suspended_account/_bh/suspended.css">
+    <link rel="preconnect" href="//fonts.gstatic.com">
+    <link href="//fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
+  </head>
+
+  <body>
+    <div>
+      <img class="suspend-photo" src="//bluehost-cdn.com/media/user/suspended_account/_bh/beback-soon.png" alt="Be back soon photo">
+      <h2 class="be-back">Be back soon!</h2>
+      <p class="website-moved">This website is under maintenance.</br>Check back tomorrow!</p>
+      </br>
+      <p class="questions">*If you’re the owner of this website and have questions, reach out to Bluehost. We’re happy to help.</p>
+    </div>
+  </body>
+
+</html>
+
+
+19:43:02.210 xml parsing failed, response data type set to string: org.xml.sax.SAXParseException; lineNumber: 9; columnNumber: 82; La referencia a la entidad "display" debe finalizar en el delimitador ';'.
+
