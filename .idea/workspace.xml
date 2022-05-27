@@ -5,6 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a5329b93-514b-4d49-a4b9-d91fbdcfd632" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/test/java/features/cliente.feature" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/features/producto.feature" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/features/venta.feature" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitattributes" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
@@ -157,6 +160,7 @@
       <change beforePath="$PROJECT_DIR$/proje.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/KarateApiTesting/KarateApi.feature" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/KarateApiTesting/TestRunner.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/features/database/database-access.feature" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/karate-config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/karate-config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/scala/APISimulation.scala" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/Demo-1.0-SNAPSHOT.jar" beforeDir="false" />
