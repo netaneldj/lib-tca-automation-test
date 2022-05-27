@@ -6,16 +6,15 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Demo" />
+        <module name="lib-tca-automation-test" />
+        <module name="api-testing" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="Demo" target="1.5" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="Demo" options="-Werror" />
+      <module name="api-testing" options="-Werror" />
+      <module name="lib-tca-automation-test" options="-Werror" />
     </option>
   </component>
 </project>

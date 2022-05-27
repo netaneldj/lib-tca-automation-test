@@ -4,18 +4,18 @@
   
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-<script type="text/javascript" src="js/jquery.min.js"></script>
-<script type="text/javascript" src="js/jquery.tablesorter.min.js"></script>
-<script type="text/javascript" src="js/Chart.min.js"></script>
-<script type="text/javascript" src="js/moment.min.js"></script>
-<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.tablesorter.min.js"></script>
+<script src="js/Chart.min.js"></script>
+<script src="js/moment.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
 
 <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css"/>
 <link rel="stylesheet" href="css/cucumber.css" type="text/css"/>
 <link rel="stylesheet" href="css/font-awesome.min.css"/>
 <link rel="shortcut icon" href="images/favicon.png"/>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function() {
     // this will tell tablesorter to try looking for the data-value attribute
     // if present, it'll sort by that instead
@@ -74,8 +74,8 @@ $(document).ready(function() {
   </thead>
   <tbody>
     <tr class="info">
-      <td>Hardwareandro.com</td>
-            <td>16 may 2022, 19:43</td>
+      <td>karateTesting</td>
+            <td>26 May 2022, 21:58</td>
     </tr>
   </tbody>
 </table>
@@ -104,8 +104,9 @@ $(document).ready(function() {
           <tr class="header">
             <th>Implementation</th>
             <th>Occurrences</th>
-            <th>Duration</th>
-            <th>Average</th>
+            <th>Average duration</th>
+            <th>Max duration</th>
+            <th>Total durations</th>
             <th>Ratio</th>
           </tr>
         </thead>
@@ -113,9 +114,10 @@ $(document).ready(function() {
         <tbody>
                       <tr>
               <td class="location">karate</td>
-              <td>22</td>
-              <td class="duration" data-value="2234313500">2s 234ms</td>
-              <td class="duration" data-value="101559704">101ms</td>
+              <td>5</td>
+              <td class="duration" data-value="97148340">0.097</td>
+              <td class="duration" data-value="97148340">0.423</td>
+              <td class="duration" data-value="485741700">0.485</td>
               <td class="passed">100.00%</td>
             </tr>
                   </tbody>
@@ -123,9 +125,10 @@ $(document).ready(function() {
         <tfoot class="total">
           <tr>
             <td>1</td>
-            <td>22</td>
-            <td class="duration">2s 234ms</td>
-            <td class="duration">101ms</td>
+            <td>5</td>
+            <td class="duration">0.097</td>
+            <td class="duration">0.485</td>
+            <td class="duration">0.485</td>
             <td>Totals</td>
           </tr>
         </tfoot>
