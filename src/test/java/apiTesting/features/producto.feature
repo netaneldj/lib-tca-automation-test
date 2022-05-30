@@ -27,8 +27,19 @@ Feature: Producto Bazar
     When method get
     Then status 200
     * print response
-    * def query = db.readRows("SELECT * FROM producto")
-    * print query
-    * assert response.length == query.length
-    * assert valid(response, query)
+    * def productoQuery = db.readRows("SELECT * FROM producto")
+    * print productoQuery
+    * assert response.length == productoQuery.length
+    * assert valid(response, productoQuery)
+
+  Scenario: Traer producto por id
+    * def productoQuery = db.readRows("SELECT * FROM producto LIMIT 1")
+    * print productoQuery
+    Given url bazarUrl
+    And path traerClientesPath, productoQuery[0].codigo_producto
+    When method get
+    Then status 200
+    * print response
+    * assert response.length == productoQuery.length
+    * assert valid(response, productoQuery)
 

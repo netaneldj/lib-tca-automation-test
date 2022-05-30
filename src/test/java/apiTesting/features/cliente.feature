@@ -21,12 +21,23 @@ Feature: Cliente Bazar
 
   Scenario: Traer clientes
     Given url bazarUrl
-    And path traerProductosPath
+    And path traerClientesPath
     When method get
     Then status 200
     * print response
-    * def query = db.readRows("SELECT * FROM producto")
-    * print query
-    * assert response.length == query.length
-    * assert valid(response, query)
+    * def clienteQuery = db.readRows("SELECT * FROM cliente")
+    * print clienteQuery
+    * assert response.length == clienteQuery.length
+    * assert valid(response, clienteQuery)
+
+  Scenario: Traer cliente por id
+    * def clienteQuery = db.readRows("SELECT * FROM cliente LIMIT 1")
+    * print clienteQuery
+    Given url bazarUrl
+    And path traerClientesPath, clienteQuery[0].id_cliente
+    When method get
+    Then status 200
+    * print response
+    * assert response.length == clienteQuery.length
+    * assert valid(response, clienteQuery)
 
