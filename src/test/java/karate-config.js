@@ -7,7 +7,9 @@ function fn() {
 	var config = { // base config JSON
 		dbConfig: { username: 'admin', password: 'admin', url: 'jdbc:mysql://localhost:3306/bazar', driverClassName: 'com.mysql.jdbc.Driver' },
 		bazarUrl : 'http://localhost:8080',
-		traerProductosPath: 'productos/traer'
+		traerProductosPath: 'productos/traer',
+		traerClientesPath: 'clientes/traer',
+		traerVentasPath: 'ventas/traer'
 	  };
 	// don't waste time waiting for a connection or if servers don't respond within 5 seconds
 	karate.configure('connectTimeout', 5000);
