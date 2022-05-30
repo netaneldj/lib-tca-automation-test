@@ -1,3 +1,4 @@
+@bazar @producto
 Feature: Producto Bazar
 
   Background:
@@ -19,6 +20,7 @@ Feature: Producto Bazar
           }
         """
 
+  @traer      
   Scenario: Traer productos
     Given url bazarUrl
     And path traerProductosPath
