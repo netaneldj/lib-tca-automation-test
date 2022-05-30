@@ -4,6 +4,9 @@ Feature: Cliente Bazar
   Background:
     * def DbUtils = Java.type('apiTesting.java.utils.DbUtils')
     * def db = new DbUtils(dbConfig)
+
+  @findAll
+  Scenario: Traer clientes
     * def valid =
         """
           function (apiResponse, dbResponse) {
@@ -18,8 +21,6 @@ Feature: Cliente Bazar
             return true;
           }
         """
-
-  Scenario: Traer clientes
     Given url bazarUrl
     And path traerClientesPath
     When method get
@@ -30,7 +31,22 @@ Feature: Cliente Bazar
     * assert response.length == clienteQuery.length
     * assert valid(response, clienteQuery)
 
+  @findById
   Scenario: Traer cliente por id
+    * def valid =
+        """
+          function (apiResponse, dbResponse) {
+            for(var i=0; i<dbResponse.length; i++){
+              if(
+                dbResponse[i].id_cliente != apiResponse.id_cliente ||
+                dbResponse[i].nombre != apiResponse.nombre ||
+                dbResponse[i].apellido != apiResponse.apellido ||
+                dbResponse[i].dni != apiResponse.dni
+                ) return false;
+            }
+            return true;
+          }
+        """
     * def clienteQuery = db.readRows("SELECT * FROM cliente LIMIT 1")
     * print clienteQuery
     Given url bazarUrl
@@ -38,6 +54,6 @@ Feature: Cliente Bazar
     When method get
     Then status 200
     * print response
-    * assert response.length == clienteQuery.length
+    * assert clienteQuery.length == 1
     * assert valid(response, clienteQuery)
 
