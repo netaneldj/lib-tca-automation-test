@@ -59,3 +59,40 @@ Feature: Producto Bazar
     * assert productoQuery.length == 1
     * assert valid(response, productoQuery)
 
+  @create
+  Scenario: Crear Producto
+    * def randomStringGenerator = read("../js/utils/randomStringGenerator.js")
+    * def randomNumberGenerator = read("../js/utils/randomNumberGenerator.js")
+    * def randomName = randomStringGenerator(10)
+    * def randomBrand = randomStringGenerator(10)
+    * def randomCost = randomNumberGenerator(4)
+    * def randomStock = randomNumberGenerator(3)
+    * def productoRequest =
+        """
+          {
+              "nombre": "#(randomName)",
+              "marca": "#(randomBrand)",
+              "costo": #(randomCost),
+              "cantidad_disponible": #(randomStock)
+          }
+        """
+    * print productoRequest
+    Given url bazarUrl
+    And path crearProductosPath
+    And request productoRequest
+    When method post
+    Then status 200
+    * print response
+    * def productoQuery = db.readRows("SELECT * FROM producto WHERE codigo_producto='"+response.codigo_producto+"'")
+    * print productoQuery
+    * assert productoQuery.length == 1
+    * assert productoRequest.nombre == response.nombre
+    * assert productoRequest.marca == response.marca
+    * assert productoRequest.costo == response.costo
+    * assert productoRequest.cantidad_disponible == response.cantidad_disponible
+    * assert productoRequest.nombre == productoQuery[0].nombre
+    * assert productoRequest.marca == productoQuery[0].marca
+    * assert productoRequest.costo == productoQuery[0].costo
+    * assert productoRequest.cantidad_disponible == productoQuery[0].cantidad_disponible
+    * def clienteQuery = db.cleanDatatable("DELETE FROM producto WHERE codigo_producto='"+response.codigo_producto+"'")
+

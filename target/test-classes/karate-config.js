@@ -9,7 +9,9 @@ function fn() {
 		bazarUrl : 'http://localhost:8080',
 		traerProductosPath: 'productos/traer',
 		traerClientesPath: 'clientes/traer',
-		traerVentasPath: 'ventas/traer'
+		traerVentasPath: 'ventas/traer',
+		crearClientesPath: 'clientes/crear',
+		crearProductosPath: 'productos/crear'
 	  };
 	// don't waste time waiting for a connection or if servers don't respond within 5 seconds
 	karate.configure('connectTimeout', 5000);

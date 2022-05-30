@@ -57,3 +57,36 @@ Feature: Cliente Bazar
     * assert clienteQuery.length == 1
     * assert valid(response, clienteQuery)
 
+  @create
+  Scenario: Crear cliente
+    * def randomStringGenerator = read("../js/utils/randomStringGenerator.js")
+    * def randomNumberGenerator = read("../js/utils/randomNumberGenerator.js")
+    * def randomName = randomStringGenerator(10)
+    * def randomSurname = randomStringGenerator(10)
+    * def randomDni = randomNumberGenerator(8)
+    * def clienteRequest =
+        """
+          {
+            "nombre": "#(randomName)",
+            "apellido": "#(randomSurname)",
+            "dni": #(randomDni)
+          }
+        """
+    * print clienteRequest
+    Given url bazarUrl
+    And path crearClientesPath
+    And request clienteRequest
+    When method post
+    Then status 200
+    * print response
+    * def clienteQuery = db.readRows("SELECT * FROM cliente WHERE id_cliente='"+response.id_cliente+"'")
+    * print clienteQuery
+    * assert clienteQuery.length == 1
+    * assert clienteRequest.nombre == response.nombre
+    * assert clienteRequest.apellido == response.apellido
+    * assert clienteRequest.dni == response.dni
+    * assert clienteRequest.nombre == clienteQuery[0].nombre
+    * assert clienteRequest.apellido == clienteQuery[0].apellido
+    * assert clienteRequest.dni == clienteQuery[0].dni
+    * def clienteQuery = db.cleanDatatable("DELETE FROM cliente WHERE id_cliente='"+response.id_cliente+"'")
+
