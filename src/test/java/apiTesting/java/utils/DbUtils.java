@@ -37,7 +37,7 @@ public class DbUtils {
 
     //insert multiple queries with batchUpdate
     public void insertRows(final String sql){
-jdbc.batchUpdate(new String[]{sql});
+        jdbc.batchUpdate(new String[]{sql});
     }
 
     public void cleanDatatable(String sql){

@@ -96,3 +96,56 @@ Feature: Producto Bazar
     * assert productoRequest.cantidad_disponible == productoQuery[0].cantidad_disponible
     * def clienteQuery = db.cleanDatatable("DELETE FROM producto WHERE codigo_producto='"+response.codigo_producto+"'")
 
+@delete    
+Scenario: Borrar producto
+  * def randomNumberGenerator = read("../js/utils/randomNumberGenerator.js")
+  * def idProducto = randomNumberGenerator(4)
+  * def productoQuery = db.insertRows("INSERT INTO producto VALUES("+idProducto+", 999, 9999, 'Test', 'Delete')")
+  Given url bazarUrl
+  And path borrarProductoPath, idProducto
+  When method delete
+  Then status 200
+  And match response == "El producto fue eliminado correctamente"
+  * def productoQuery = db.readRows("SELECT * FROM producto WHERE codigo_producto="+idProducto+"")
+  * assert productoQuery.length == 0
+
+@edit
+Scenario: Editar producto
+  * def randomStringGenerator = read("../js/utils/randomStringGenerator.js")
+  * def randomNumberGenerator = read("../js/utils/randomNumberGenerator.js")
+  * def randomName = randomStringGenerator(10)
+  * def randomBrand = randomStringGenerator(10)
+  * def randomCost = randomNumberGenerator(4)
+  * def randomStock = randomNumberGenerator(3)
+  * def idProducto = randomNumberGenerator(4)
+  * def productoQuery = db.insertRows("INSERT INTO producto VALUES("+idProducto+", 999, 9999, 'Test', 'Delete')")
+  * def productoRequest =
+      """
+        {
+            "nombre": "#(randomName)",
+            "marca": "#(randomBrand)",
+            "costo": #(randomCost),
+            "cantidad_disponible": #(randomStock)
+        }
+      """
+  * print productoRequest
+  Given url bazarUrl
+  And path editarProductosPath, idProducto
+  And request productoRequest
+  When method put
+  Then status 200
+  * print response
+  * assert response.codigo_producto == idProducto
+  * def productoQuery = db.readRows("SELECT * FROM producto WHERE codigo_producto='"+response.codigo_producto+"'")
+  * print productoQuery
+  * assert productoQuery.length == 1
+  * assert productoRequest.nombre == response.nombre
+  * assert productoRequest.marca == response.marca
+  * assert productoRequest.costo == response.costo
+  * assert productoRequest.cantidad_disponible == response.cantidad_disponible
+  * assert productoRequest.nombre == productoQuery[0].nombre
+  * assert productoRequest.marca == productoQuery[0].marca
+  * assert productoRequest.costo == productoQuery[0].costo
+  * assert productoRequest.cantidad_disponible == productoQuery[0].cantidad_disponible
+  * def clienteQuery = db.cleanDatatable("DELETE FROM producto WHERE codigo_producto='"+response.codigo_producto+"'")
+

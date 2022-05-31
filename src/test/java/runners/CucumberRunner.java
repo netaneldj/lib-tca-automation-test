@@ -36,7 +36,7 @@ public class CucumberRunner {
 		Results results = Runner.path("classpath:apiTesting//features")
                                 .tags(tag, "~@ignore")
                                 .outputCucumberJson(true)
-                                .parallel(5);
+                                .parallel(1);
 		System.out.println("Result Dir: "+results.getReportDir());
         generateReport(karateOutputPath);
         assertEquals(0, results.getFailCount(), results.getErrorMessages());        

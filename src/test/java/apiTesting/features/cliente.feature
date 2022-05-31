@@ -90,3 +90,53 @@ Feature: Cliente Bazar
     * assert clienteRequest.dni == clienteQuery[0].dni
     * def clienteQuery = db.cleanDatatable("DELETE FROM cliente WHERE id_cliente='"+response.id_cliente+"'")
 
+@delete    
+Scenario: Borrar cliente
+  * def randomNumberGenerator = read("../js/utils/randomNumberGenerator.js")
+  * def idCliente = randomNumberGenerator(4)
+  * def clienteQuery = db.insertRows("INSERT INTO cliente VALUES("+idCliente+", 'Delete', 12345678, 'Test')")
+  Given url bazarUrl
+  And path borrarClientesPath, idCliente
+  When method delete
+  Then status 200
+  And match response == "El cliente fue eliminado correctamente"
+  * def clienteQuery = db.readRows("SELECT * FROM cliente WHERE id_cliente="+idCliente+"")
+  * assert clienteQuery.length == 0
+
+  @edit
+  Scenario: Editar cliente
+    * def randomStringGenerator = read("../js/utils/randomStringGenerator.js")
+    * def randomNumberGenerator = read("../js/utils/randomNumberGenerator.js")
+    * def randomName = randomStringGenerator(10)
+    * def randomSurname = randomStringGenerator(10)
+    * def randomDni = randomNumberGenerator(8)
+    * def idCliente = randomNumberGenerator(4)
+    * def clienteQuery = db.insertRows("INSERT INTO cliente VALUES("+idCliente+", 'Delete', 12345678, 'Test')")
+    * def clienteRequest =
+        """
+          {
+            "nombre": "#(randomName)",
+            "apellido": "#(randomSurname)",
+            "dni": #(randomDni)
+          }
+        """
+    Given url bazarUrl
+    And path editarClientesPath, idCliente
+    And request clienteRequest
+    When method put
+    Then status 200
+    * print response
+    * assert response.id_cliente == idCliente
+    * def clienteQuery = db.readRows("SELECT * FROM cliente WHERE id_cliente='"+response.id_cliente+"'")
+    * print clienteQuery
+    * assert clienteQuery.length == 1
+    * assert clienteRequest.nombre == response.nombre
+    * assert clienteRequest.apellido == response.apellido
+    * assert clienteRequest.dni == response.dni
+    * assert clienteRequest.nombre == clienteQuery[0].nombre
+    * assert clienteRequest.apellido == clienteQuery[0].apellido
+    * assert clienteRequest.dni == clienteQuery[0].dni
+    * def clienteQuery = db.cleanDatatable("DELETE FROM cliente WHERE id_cliente='"+response.id_cliente+"'")
+
+  
+

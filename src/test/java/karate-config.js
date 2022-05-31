@@ -11,7 +11,11 @@ function fn() {
 		traerClientesPath: 'clientes/traer',
 		traerVentasPath: 'ventas/traer',
 		crearClientesPath: 'clientes/crear',
-		crearProductosPath: 'productos/crear'
+		crearProductosPath: 'productos/crear',
+		borrarClientesPath: 'clientes/borrar',
+		editarClientesPath: 'clientes/editar',
+		borrarProductoPath: 'productos/borrar',
+		editarProductosPath: 'productos/editar'
 	  };
 	// don't waste time waiting for a connection or if servers don't respond within 5 seconds
 	karate.configure('connectTimeout', 5000);
