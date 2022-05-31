@@ -7,14 +7,18 @@ Feature: Venta Bazar
 
   @findAll      
   Scenario: Traer ventas
-    * def valid =
+    * def validateVenta =
         """
           function (apiResponse, dbResponse) {
             for(var i=0; i<dbResponse.length; i++){
               if(
                 dbResponse[i].codigo_venta != apiResponse[i].codigo_venta ||
                 dbResponse[i].fecha_venta.toString() != apiResponse[i].fecha_venta ||
-                dbResponse[i].total != apiResponse[i].total
+                dbResponse[i].total != apiResponse[i].total ||
+                dbResponse[i].id_cliente != apiResponse[i].unCliente.id_cliente ||
+                dbResponse[i].nombre != apiResponse[i].unCliente.nombre ||
+                dbResponse[i].apellido != apiResponse[i].unCliente.apellido ||
+                dbResponse[i].dni != apiResponse[i].unCliente.dni
                 ) return false;
             }
             return true;
@@ -25,10 +29,10 @@ Feature: Venta Bazar
     When method get
     Then status 200
     * print response
-    * def ventaQuery = db.readRows("SELECT * FROM venta")
+    * def ventaQuery = db.readRows("SELECT v.codigo_venta, v.fecha_venta, v.total, c.id_cliente, c.nombre, c.apellido, c.dni FROM venta v INNER JOIN cliente c ON v.un_cliente_id_cliente = c.id_cliente")
     * print ventaQuery
     * assert response.length == ventaQuery.length
-    * assert valid(response, ventaQuery)
+    * assert validateVenta(response, ventaQuery)
 
   @findById
   Scenario: Traer venta por id
