@@ -10,7 +10,7 @@ Feature: Venta Bazar
     * def validateVenta =
         """
           function (apiResponse, dbResponse) {
-            for(var i=0; i<dbResponse.length; i++){
+            for(var i=0; i<apiResponse.length; i++){
               if(
                 dbResponse[i].codigo_venta != apiResponse[i].codigo_venta ||
                 dbResponse[i].fecha_venta.toString() != apiResponse[i].fecha_venta ||
@@ -29,10 +29,10 @@ Feature: Venta Bazar
     When method get
     Then status 200
     * print response
-    * def ventaQuery = db.readRows("SELECT v.codigo_venta, v.fecha_venta, v.total, c.id_cliente, c.nombre, c.apellido, c.dni FROM venta v INNER JOIN cliente c ON v.un_cliente_id_cliente = c.id_cliente")
-    * print ventaQuery
-    * assert response.length == ventaQuery.length
-    * assert validateVenta(response, ventaQuery)
+    * def ventasQuery = db.readRows("SELECT v.codigo_venta, v.fecha_venta, v.total, c.id_cliente, c.nombre, c.apellido, c.dni FROM bazar.venta v INNER JOIN bazar.cliente c ON v.un_cliente_id_cliente = c.id_cliente")
+    * print ventasQuery
+    # SELECT v.codigo_venta, v.fecha_venta, v.total, c.id_cliente, c.nombre, c.apellido, c.dni, p.codigo_producto, p.nombre, p.marca, p.costo, p.cantidad_disponible FROM bazar.venta v INNER JOIN bazar.cliente c ON v.un_cliente_id_cliente = c.id_cliente INNER JOIN bazar.venta_lista_productos vlp ON v.codigo_venta = vlp.venta_codigo_venta INNER JOIN bazar.producto p ON vlp.lista_productos_codigo_producto = p.codigo_producto
+    * assert validateVenta(response, ventasQuery)
 
   @findById
   Scenario: Traer venta por id
