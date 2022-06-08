@@ -4,9 +4,6 @@ Feature: Venta Bazar
   Background:
     * def DbUtils = Java.type('apiTesting.java.utils.DbUtils')
     * def db = new DbUtils(dbConfig)
-
-  @findAll      
-  Scenario: Traer ventas
     * def validateVenta =
         """
           function (apiResponse, dbResponse, productosVentasQuery) {
@@ -27,7 +24,6 @@ Feature: Venta Bazar
                       break;
                     }
                   }
-                  console.log(productosVentasQuery[k].venta_codigo_venta);
                   if(
                     apiResponse[i].listaProductos[j].codigo_producto != productosVentasQuery[k].codigo_producto ||
                     apiResponse[i].listaProductos[j].nombre != productosVentasQuery[k].nombre ||
@@ -40,6 +36,9 @@ Feature: Venta Bazar
             return true;
           }
         """
+
+  @findAll      
+  Scenario: Traer venta
     Given url bazarUrl
     And path traerVentasPath
     When method get
@@ -53,19 +52,6 @@ Feature: Venta Bazar
 
   @findById
   Scenario: Traer venta por id
-    * def valid =
-        """
-          function (apiResponse, dbResponse) {
-            for(var i=0; i<dbResponse.length; i++){
-              if(
-                dbResponse[i].codigo_venta != apiResponse.codigo_venta ||
-                dbResponse[i].fecha_venta.toString() != apiResponse.fecha_venta ||
-                dbResponse[i].total != apiResponse.total
-                ) return false;
-            }
-            return true;
-          }
-        """
     * def ventaQuery = db.readRows("SELECT * FROM venta LIMIT 1")
     * print ventaQuery
     Given url bazarUrl
@@ -74,6 +60,38 @@ Feature: Venta Bazar
     Then status 200
     * print response
     * assert ventaQuery.length == 1
-    * assert valid(response, ventaQuery)
+    * def ventasQuery = db.readRows("SELECT v.codigo_venta, v.fecha_venta, v.total, c.id_cliente, c.nombre, c.apellido, c.dni FROM bazar.venta v INNER JOIN bazar.cliente c ON v.un_cliente_id_cliente = c.id_cliente WHERE v.codigo_venta="+ventaQuery[0].codigo_venta)
+    * print ventasQuery
+    * def productosVentasQuery = db.readRows("SELECT vlp.venta_codigo_venta AS codigo_venta, p.codigo_producto, p.nombre, p.marca, p.costo, p.cantidad_disponible FROM bazar.venta_lista_productos vlp INNER JOIN bazar.producto p ON vlp.lista_productos_codigo_producto = p.codigo_producto WHERE vlp.venta_codigo_venta="+ventaQuery[0].codigo_venta)
+    * print productosVentasQuery
+    * assert validateVenta(response, ventasQuery, productosVentasQuery)
+
+  @findProductosVenta
+  Scenario: Traer productos venta por codigo venta
+    * def validateProductoVenta =
+        """
+          function (apiResponse, productosVentasQuery) {
+            for(var i=0; i<apiResponse.length; i++){
+              if(
+                apiResponse[i].codigo_producto != productosVentasQuery[i].codigo_producto ||
+                apiResponse[i].nombre != productosVentasQuery[i].nombre ||
+                apiResponse[i].marca != productosVentasQuery[i].marca ||
+                parseFloat(apiResponse[i].costo) != parseFloat(productosVentasQuery[i].costo) ||
+                parseInt(apiResponse[i].cantidad_disponible) != parseInt(productosVentasQuery[i].cantidad_disponible)
+                ) return false;
+            }
+            return true;
+          }
+        """
+    * def ventaQuery = db.readRows("SELECT * FROM venta LIMIT 1")
+    * print ventaQuery
+    Given url bazarUrl
+    And path traerProductosVentaPath, ventaQuery[0].codigo_venta
+    When method get
+    Then status 200
+    * print response
+    * def productosVentasQuery = db.readRows("SELECT vlp.venta_codigo_venta AS codigo_venta, p.codigo_producto, p.nombre, p.marca, p.costo, p.cantidad_disponible FROM bazar.venta_lista_productos vlp INNER JOIN bazar.producto p ON vlp.lista_productos_codigo_producto = p.codigo_producto WHERE vlp.venta_codigo_venta="+ventaQuery[0].codigo_venta)
+    * print productosVentasQuery
+    * assert validateProductoVenta(response, productosVentasQuery)
 
 

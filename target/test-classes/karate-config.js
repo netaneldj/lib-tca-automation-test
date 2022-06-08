@@ -10,6 +10,7 @@ function fn() {
 		traerProductosPath: 'productos/traer',
 		traerClientesPath: 'clientes/traer',
 		traerVentasPath: 'ventas/traer',
+		traerProductosVentaPath: 'ventas/productos',
 		crearClientesPath: 'clientes/crear',
 		crearProductosPath: 'productos/crear',
 		borrarClientesPath: 'clientes/borrar',
