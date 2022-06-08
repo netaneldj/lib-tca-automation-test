@@ -15,6 +15,7 @@ function fn() {
 		traerReporteMayorVentaPath: 'ventas/mayor_venta',
 		crearClientesPath: 'clientes/crear',
 		crearProductosPath: 'productos/crear',
+		crearVentaPath: 'ventas/crear',
 		borrarClientesPath: 'clientes/borrar',
 		editarClientesPath: 'clientes/editar',
 		borrarProductoPath: 'productos/borrar',
