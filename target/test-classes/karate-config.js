@@ -12,6 +12,7 @@ function fn() {
 		traerVentasPath: 'ventas/traer',
 		traerProductosVentaPath: 'ventas/productos',
 		traerReporteVentasFechaPath: 'ventas',
+		traerReporteMayorVentaPath: 'ventas/mayor_venta',
 		crearClientesPath: 'clientes/crear',
 		crearProductosPath: 'productos/crear',
 		borrarClientesPath: 'clientes/borrar',

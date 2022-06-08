@@ -107,3 +107,20 @@ Feature: Venta Bazar
     * print reporteVentasQuery
     * assert response.monto == reporteVentasQuery[0].monto
     * assert response.cantidad_total_ventas == reporteVentasQuery[0].cantidad_total_ventas
+
+  @getReporteMayorVenta
+  Scenario: Traer reporte mayor venta
+    Given url bazarUrl
+    And path traerReporteMayorVentaPath
+    When method get
+    Then status 200
+    * print response
+    * def reporteVentaQuery = db.readRows("SELECT v.codigo_venta, v.total, c.nombre, c.apellido FROM bazar.venta v INNER JOIN bazar.cliente c ON v.un_cliente_id_cliente = c.id_cliente ORDER BY v.total DESC LIMIT 1")
+    * print reporteVentaQuery
+    * def productosVentaQuery = db.readRows("SELECT COUNT(vlp.venta_codigo_venta) AS cantidad_total_productos FROM bazar.venta_lista_productos vlp WHERE vlp.venta_codigo_venta='"+reporteVentaQuery[0].codigo_venta+"'")
+    * print productosVentaQuery
+    * assert response.codigo_venta == reporteVentaQuery[0].codigo_venta
+    * assert parseFloat(response.total) == parseFloat(reporteVentaQuery[0].total)
+    * assert response.cantidad_total_productos == productosVentaQuery[0].cantidad_total_productos
+    * assert response.nombre_cliente == reporteVentaQuery[0].nombre
+    * assert response.apellido_cliente == reporteVentaQuery[0].apellido
