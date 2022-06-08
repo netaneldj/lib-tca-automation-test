@@ -94,4 +94,16 @@ Feature: Venta Bazar
     * print productosVentasQuery
     * assert validateProductoVenta(response, productosVentasQuery)
 
-
+  @getReporteVentas
+  Scenario: Traer reporte ventas por fecha
+    * def ventaQuery = db.readRows("SELECT * FROM venta LIMIT 1")
+    * print ventaQuery
+    Given url bazarUrl
+    And path traerReporteVentasFechaPath, ventaQuery[0].fecha_venta
+    When method get
+    Then status 200
+    * print response
+    * def reporteVentasQuery = db.readRows("SELECT COUNT(v.codigo_venta) AS cantidad_total_ventas, SUM(v.total) AS monto FROM bazar.venta v WHERE v.fecha_venta='"+ventaQuery[0].fecha_venta.toString()+"' GROUP BY v.fecha_venta")
+    * print reporteVentasQuery
+    * assert response.monto == reporteVentasQuery[0].monto
+    * assert response.cantidad_total_ventas == reporteVentasQuery[0].cantidad_total_ventas
