@@ -9,7 +9,7 @@ Feature: Venta Bazar
   Scenario: Traer ventas
     * def validateVenta =
         """
-          function (apiResponse, dbResponse) {
+          function (apiResponse, dbResponse, productosVentasQuery) {
             for(var i=0; i<apiResponse.length; i++){
               if(
                 dbResponse[i].codigo_venta != apiResponse[i].codigo_venta ||
@@ -20,6 +20,22 @@ Feature: Venta Bazar
                 dbResponse[i].apellido != apiResponse[i].unCliente.apellido ||
                 dbResponse[i].dni != apiResponse[i].unCliente.dni
                 ) return false;
+                for(var j=0; j<apiResponse[i].listaProductos.length; j++){
+                  var k;
+                  for(k=0; k < productosVentasQuery.length; k++){
+                    if(productosVentasQuery[k].venta_codigo_venta==apiResponse[i].codigo_venta && productosVentasQuery[k].codigo_producto==apiResponse[i].listaProductos[j].codigo_producto){
+                      break;
+                    }
+                  }
+                  console.log(productosVentasQuery[k].venta_codigo_venta);
+                  if(
+                    apiResponse[i].listaProductos[j].codigo_producto != productosVentasQuery[k].codigo_producto ||
+                    apiResponse[i].listaProductos[j].nombre != productosVentasQuery[k].nombre ||
+                    apiResponse[i].listaProductos[j].marca != productosVentasQuery[k].marca ||
+                    parseFloat(apiResponse[i].listaProductos[j].costo) != parseFloat(productosVentasQuery[k].costo) ||
+                    parseInt(apiResponse[i].listaProductos[j].cantidad_disponible) != parseInt(productosVentasQuery[k].cantidad_disponible)
+                    ) return false;
+                } 
             }
             return true;
           }
@@ -31,8 +47,9 @@ Feature: Venta Bazar
     * print response
     * def ventasQuery = db.readRows("SELECT v.codigo_venta, v.fecha_venta, v.total, c.id_cliente, c.nombre, c.apellido, c.dni FROM bazar.venta v INNER JOIN bazar.cliente c ON v.un_cliente_id_cliente = c.id_cliente")
     * print ventasQuery
-    # SELECT v.codigo_venta, v.fecha_venta, v.total, c.id_cliente, c.nombre, c.apellido, c.dni, p.codigo_producto, p.nombre, p.marca, p.costo, p.cantidad_disponible FROM bazar.venta v INNER JOIN bazar.cliente c ON v.un_cliente_id_cliente = c.id_cliente INNER JOIN bazar.venta_lista_productos vlp ON v.codigo_venta = vlp.venta_codigo_venta INNER JOIN bazar.producto p ON vlp.lista_productos_codigo_producto = p.codigo_producto
-    * assert validateVenta(response, ventasQuery)
+    * def productosVentasQuery = db.readRows("SELECT vlp.venta_codigo_venta AS codigo_venta, p.codigo_producto, p.nombre, p.marca, p.costo, p.cantidad_disponible FROM bazar.venta_lista_productos vlp INNER JOIN bazar.producto p ON vlp.lista_productos_codigo_producto = p.codigo_producto")
+    * print productosVentasQuery
+    * assert validateVenta(response, ventasQuery, productosVentasQuery)
 
   @findById
   Scenario: Traer venta por id
