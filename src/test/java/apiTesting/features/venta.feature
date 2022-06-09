@@ -193,3 +193,104 @@ Feature: Venta Bazar
     * def ventaQuery = db.cleanDatatable("DELETE FROM venta WHERE codigo_venta='"+response.codigo_venta+"'")
     * def clienteQuery = db.cleanDatatable("DELETE FROM cliente WHERE id_cliente='"+idCliente+"'")
     * def productoQuery = db.cleanDatatable("DELETE FROM producto WHERE codigo_producto='"+idProducto+"'")
+
+  @delete
+  Scenario: Borrar venta
+    * def randomStringGenerator = read("../js/utils/randomStringGenerator.js")
+    * def randomNumberGenerator = read("../js/utils/randomNumberGenerator.js")
+    * def randomNameCliente = randomStringGenerator(10)
+    * def randomSurname = randomStringGenerator(10)
+    * def randomDni = randomNumberGenerator(8)
+    * def idCliente = randomNumberGenerator(4)
+    * def randomNameProducto = randomStringGenerator(10)
+    * def randomBrand = randomStringGenerator(10)
+    * def randomCost = randomNumberGenerator(4)
+    * def randomStock = randomNumberGenerator(3)
+    * def idProducto = randomNumberGenerator(4)
+    * def productoQuery = db.insertRows("INSERT INTO producto VALUES("+idProducto+", "+randomCost+", "+randomStock+", '"+randomBrand+"', '"+randomNameProducto+"')")
+    * def clienteQuery = db.insertRows("INSERT INTO cliente VALUES("+idCliente+", '"+randomSurname+"', "+randomDni+", '"+randomNameCliente+"')")
+    * def ventaRequest = 
+      """
+        {
+            "listaProductos": [{"codigo_producto": #(idProducto)}],
+            "unCliente": {"id_cliente": #(idCliente)}
+        }        
+      """
+    Given url bazarUrl
+    And path crearVentaPath
+    And request ventaRequest
+    When method post
+    Then status 200
+    * print response
+    * def codigoVenta = response.codigo_venta
+
+    Given url bazarUrl
+    And path borrarVentasPath, codigoVenta
+    When method delete
+    Then status 200
+
+    * def ventaQuery = db.readRows("SELECT * FROM venta WHERE codigo_venta='"+codigoVenta+"'")
+    * assert ventaQuery.length == 0
+
+  @edit
+  Scenario: Editar venta
+    * def randomStringGenerator = read("../js/utils/randomStringGenerator.js")
+    * def randomNumberGenerator = read("../js/utils/randomNumberGenerator.js")
+    * def randomNameCliente = randomStringGenerator(10)
+    * def randomSurname = randomStringGenerator(10)
+    * def randomDni = randomNumberGenerator(8)
+    * def idCliente = randomNumberGenerator(4)
+    * def randomNameProducto = randomStringGenerator(10)
+    * def randomBrand = randomStringGenerator(10)
+    * def randomCost = randomNumberGenerator(4)
+    * def randomStock = randomNumberGenerator(3)
+    * def idProducto = randomNumberGenerator(4)
+    * def productoQuery = db.insertRows("INSERT INTO producto VALUES("+idProducto+", "+randomCost+", "+randomStock+", '"+randomBrand+"', '"+randomNameProducto+"')")
+    * def clienteQuery = db.insertRows("INSERT INTO cliente VALUES("+idCliente+", '"+randomSurname+"', "+randomDni+", '"+randomNameCliente+"')")
+    * def ventaRequest = 
+      """
+        {
+            "listaProductos": [{"codigo_producto": #(idProducto)}],
+            "unCliente": {"id_cliente": #(idCliente)}
+        }        
+      """
+    Given url bazarUrl
+    And path crearVentaPath
+    And request ventaRequest
+    When method post
+    Then status 200
+    * print response
+
+    * def randomNameCliente = randomStringGenerator(10)
+    * def randomSurname = randomStringGenerator(10)
+    * def randomDni = randomNumberGenerator(8)
+    * def idCliente = randomNumberGenerator(4)
+    * def randomNameProducto = randomStringGenerator(10)
+    * def randomBrand = randomStringGenerator(10)
+    * def randomCost = randomNumberGenerator(4)
+    * def randomStock = randomNumberGenerator(3)
+    * def idProducto = randomNumberGenerator(4)
+    * def productoQuery = db.insertRows("INSERT INTO producto VALUES("+idProducto+", "+randomCost+", "+randomStock+", '"+randomBrand+"', '"+randomNameProducto+"')")
+    * def clienteQuery = db.insertRows("INSERT INTO cliente VALUES("+idCliente+", '"+randomSurname+"', "+randomDni+", '"+randomNameCliente+"')")
+    * def ventaRequest = 
+      """
+        {
+            "listaProductos": [{"codigo_producto": #(idProducto)}],
+            "unCliente": {"id_cliente": #(idCliente)}
+        }        
+      """
+    Given url bazarUrl
+    And path editarVentasPath, response.codigo_venta
+    And request ventaRequest
+    When method put
+    Then status 200
+    * print response
+    * def ventasQuery = db.readRows("SELECT v.codigo_venta, v.fecha_venta, v.total, c.id_cliente, c.nombre, c.apellido, c.dni FROM bazar.venta v INNER JOIN bazar.cliente c ON v.un_cliente_id_cliente = c.id_cliente WHERE v.codigo_venta="+response.codigo_venta)
+    * print ventasQuery
+    * def productosVentasQuery = db.readRows("SELECT vlp.venta_codigo_venta AS codigo_venta, p.codigo_producto, p.nombre, p.marca, p.costo, p.cantidad_disponible FROM bazar.venta_lista_productos vlp INNER JOIN bazar.producto p ON vlp.lista_productos_codigo_producto = p.codigo_producto WHERE vlp.venta_codigo_venta="+response.codigo_venta)
+    * print productosVentasQuery
+    * assert validateVenta(response, ventasQuery, productosVentasQuery)
+    * def ventaListaProductosQuery = db.cleanDatatable("DELETE FROM venta_lista_productos WHERE venta_codigo_venta='"+response.codigo_venta+"'")
+    * def ventaQuery = db.cleanDatatable("DELETE FROM venta WHERE codigo_venta='"+response.codigo_venta+"'")
+    * def clienteQuery = db.cleanDatatable("DELETE FROM cliente WHERE id_cliente='"+idCliente+"'")
+    * def productoQuery = db.cleanDatatable("DELETE FROM producto WHERE codigo_producto='"+idProducto+"'")
