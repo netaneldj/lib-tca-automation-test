@@ -77,7 +77,7 @@ Feature: Cliente Bazar
     And path crearClientesPath
     And request clienteRequest
     When method post
-    Then status 200
+    Then status 201
     * print response
     * def clienteQuery = db.readRows("SELECT * FROM cliente WHERE id_cliente='"+response.id_cliente+"'")
     * print clienteQuery

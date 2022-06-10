@@ -81,7 +81,7 @@ Feature: Producto Bazar
     And path crearProductosPath
     And request productoRequest
     When method post
-    Then status 200
+    Then status 201
     * print response
     * def productoQuery = db.readRows("SELECT * FROM producto WHERE codigo_producto='"+response.codigo_producto+"'")
     * print productoQuery

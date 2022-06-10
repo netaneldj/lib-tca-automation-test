@@ -182,7 +182,7 @@ Feature: Venta Bazar
     And path crearVentaPath
     And request ventaRequest
     When method post
-    Then status 200
+    Then status 201
     * print response
     * def ventasQuery = db.readRows("SELECT v.codigo_venta, v.fecha_venta, v.total, c.id_cliente, c.nombre, c.apellido, c.dni FROM bazar.venta v INNER JOIN bazar.cliente c ON v.un_cliente_id_cliente = c.id_cliente WHERE v.codigo_venta="+response.codigo_venta)
     * print ventasQuery
