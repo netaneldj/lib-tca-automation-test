@@ -193,6 +193,31 @@ Feature: Venta Bazar
     * def ventaQuery = db.cleanDatatable("DELETE FROM venta WHERE codigo_venta='"+response.codigo_venta+"'")
     * def clienteQuery = db.cleanDatatable("DELETE FROM cliente WHERE id_cliente='"+idCliente+"'")
     * def productoQuery = db.cleanDatatable("DELETE FROM producto WHERE codigo_producto='"+idProducto+"'")
+  
+  @updateStock
+  Scenario: Actualizar stock productos
+    * def randomStringGenerator = read("../js/utils/randomStringGenerator.js")
+    * def randomNumberGenerator = read("../js/utils/randomNumberGenerator.js")
+    * def randomNameCliente = randomStringGenerator(10)
+    * def randomSurname = randomStringGenerator(10)
+    * def randomDni = randomNumberGenerator(8)
+    * def idCliente = randomNumberGenerator(4)
+    * def randomNameProducto = randomStringGenerator(10)
+    * def randomBrand = randomStringGenerator(10)
+    * def randomCost = randomNumberGenerator(4)
+    * def randomStock = randomNumberGenerator(3)
+    * def idProducto = randomNumberGenerator(4)
+    * def productoQuery = db.insertRows("INSERT INTO producto VALUES("+idProducto+", "+randomCost+", "+randomStock+", '"+randomBrand+"', '"+randomNameProducto+"')")
+    * def clienteQuery = db.insertRows("INSERT INTO cliente VALUES("+idCliente+", '"+randomSurname+"', "+randomDni+", '"+randomNameCliente+"')")
+    * def venta1 = call read('venta.feature@custom'){idProducto: #(idProducto), idCliente: #(idCliente)}
+    * def venta2 = call read('venta.feature@custom'){idProducto: #(idProducto), idCliente: #(idCliente)}
+    * assert venta1.response.listaProductos[0].cantidad_disponible == (venta2.response.listaProductos[0].cantidad_disponible + 1)
+    * def ventaListaProductosQuery = db.cleanDatatable("DELETE FROM venta_lista_productos WHERE venta_codigo_venta='"+venta1.response.codigo_venta+"'")
+    * def ventaQuery = db.cleanDatatable("DELETE FROM venta WHERE codigo_venta='"+venta1.response.codigo_venta+"'")
+    * def ventaListaProductosQuery = db.cleanDatatable("DELETE FROM venta_lista_productos WHERE venta_codigo_venta='"+venta2.response.codigo_venta+"'")
+    * def ventaQuery = db.cleanDatatable("DELETE FROM venta WHERE codigo_venta='"+venta2.response.codigo_venta+"'")
+    * def clienteQuery = db.cleanDatatable("DELETE FROM cliente WHERE id_cliente='"+idCliente+"'")
+    * def productoQuery = db.cleanDatatable("DELETE FROM producto WHERE codigo_producto='"+idProducto+"'")
 
   @delete
   Scenario: Borrar venta
@@ -209,21 +234,8 @@ Feature: Venta Bazar
     * def idProducto = randomNumberGenerator(4)
     * def productoQuery = db.insertRows("INSERT INTO producto VALUES("+idProducto+", "+randomCost+", "+randomStock+", '"+randomBrand+"', '"+randomNameProducto+"')")
     * def clienteQuery = db.insertRows("INSERT INTO cliente VALUES("+idCliente+", '"+randomSurname+"', "+randomDni+", '"+randomNameCliente+"')")
-    * def ventaRequest = 
-      """
-        {
-            "listaProductos": [{"codigo_producto": #(idProducto)}],
-            "unCliente": {"id_cliente": #(idCliente)}
-        }        
-      """
-    Given url bazarUrl
-    And path crearVentaPath
-    And request ventaRequest
-    When method post
-    Then status 200
-    * print response
-    * def codigoVenta = response.codigo_venta
-
+    * def venta = call read('venta.feature@custom'){idProducto: #(idProducto), idCliente: #(idCliente)}
+    * def codigoVenta = venta.response.codigo_venta
     Given url bazarUrl
     And path borrarVentasPath, codigoVenta
     When method delete
@@ -247,20 +259,7 @@ Feature: Venta Bazar
     * def idProducto = randomNumberGenerator(4)
     * def productoQuery = db.insertRows("INSERT INTO producto VALUES("+idProducto+", "+randomCost+", "+randomStock+", '"+randomBrand+"', '"+randomNameProducto+"')")
     * def clienteQuery = db.insertRows("INSERT INTO cliente VALUES("+idCliente+", '"+randomSurname+"', "+randomDni+", '"+randomNameCliente+"')")
-    * def ventaRequest = 
-      """
-        {
-            "listaProductos": [{"codigo_producto": #(idProducto)}],
-            "unCliente": {"id_cliente": #(idCliente)}
-        }        
-      """
-    Given url bazarUrl
-    And path crearVentaPath
-    And request ventaRequest
-    When method post
-    Then status 200
-    * print response
-
+    * def venta = call read('venta.feature@custom'){idProducto: #(idProducto), idCliente: #(idCliente)}
     * def randomNameCliente = randomStringGenerator(10)
     * def randomSurname = randomStringGenerator(10)
     * def randomDni = randomNumberGenerator(8)
@@ -280,7 +279,7 @@ Feature: Venta Bazar
         }        
       """
     Given url bazarUrl
-    And path editarVentasPath, response.codigo_venta
+    And path editarVentasPath, venta.response.codigo_venta
     And request ventaRequest
     When method put
     Then status 200
@@ -294,3 +293,19 @@ Feature: Venta Bazar
     * def ventaQuery = db.cleanDatatable("DELETE FROM venta WHERE codigo_venta='"+response.codigo_venta+"'")
     * def clienteQuery = db.cleanDatatable("DELETE FROM cliente WHERE id_cliente='"+idCliente+"'")
     * def productoQuery = db.cleanDatatable("DELETE FROM producto WHERE codigo_producto='"+idProducto+"'")
+
+  @custom @ignore
+  Scenario: Crear venta por parametro
+    * def ventaRequest = 
+      """
+        {
+            "listaProductos": [{"codigo_producto": #(idProducto)}],
+            "unCliente": {"id_cliente": #(idCliente)}
+        }        
+      """
+    Given url bazarUrl
+    And path crearVentaPath
+    And request ventaRequest
+    When method post
+    Then status 201
+    * print response
